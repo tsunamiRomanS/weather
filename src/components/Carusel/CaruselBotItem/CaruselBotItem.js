@@ -15,18 +15,15 @@ background-image: linear-gradient(
   hsl(182deg 100% 50%) 79%,
   hsl(179deg 100% 67%) 100%
 );
-width: 11vw;
 border-radius: 20px;
 text-align: center;
 cursor: pointer;
 `
 export default function CaruselBotItem(props) {
-  // if (props.dt_txt !== props.showItem.name) {
   return (
-    <Element onClick={() => props.handleclick(String(props.dt_txt))}>
+    <Element onClick={() => props.select(props)}>
       <Header as={"h2"} inverted>{Math.round(props.temp - 273)}&nbsp;&deg;</Header>
       <Header as={"h4"} inverted>{String(props.dt_txt).match(/\d{2}:\d{2}:\d{2}/i)}</Header>
     </Element>
   )
 };
-// };

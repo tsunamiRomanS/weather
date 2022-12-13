@@ -1,8 +1,9 @@
-import React, {useEffect, useReducer} from 'react'
-import {useSelector} from "react-redux";
-import {Grid} from "semantic-ui-react"
+import React from 'react'
 import CaruselBotItem from "./CaruselBotItem/CaruselBotItem";
 import Main from "../Main/Main"
+import {useDispatch, useSelector} from "react-redux";
+import {Grid} from "semantic-ui-react"
+import {selectWeather} from "../../store/slices/day5hour3/day5hour3";
 import styled from "styled-components";
 const MainWrapper = styled.div`
 background-image: linear-gradient(
@@ -24,51 +25,20 @@ border-radius: 20px;
 `
 export default function CaruselBox() {
   const data = useSelector(state => state.day5hour3.dataWeather.list)
-  let q = false
-  if (data) q = true
-  function reducer(state, action) {
-    switch (action.type) {
-      case "click": {
-        return {
-          ...state,
-          showItem: {
-            name: action.payload.dt_txt, element: action.payload.element
-          }
-        }
-      }
-      default:
-        break;
-    }
-  }
-  const [state, dispatch] = useReducer(reducer, {
-    showItem: {name: "", element: null},
-  })
-  function handleclick(dt_txt) {
-    if (data) {
-      data.forEach(element => {
-        if (String(element.dt_txt).slice(8, 11) === String(new Date()).slice(8, 11)) {
-          if (element.dt_txt === dt_txt) {
-            dispatch({
-              type: "click",
-              payload: {dt_txt, element}
-            })
-          }
-        }
-      });
+  const dispatch = useDispatch();
+  const {day5hour3} = useSelector(state => state)
+  function select(element) {
+    if (day5hour3.dataWeather.list) {
+      dispatch(selectWeather(element))
     }
   }
   return (
     <>
       <Grid.Row centered columns={2}>
         <Grid.Column>
-          {!state.showItem.name ?
-            <MainWrapper />
-            :
-            <MainWrapper>
-              <Main {...state.showItem.element} />
-            </MainWrapper>
-          }
-
+          <MainWrapper>
+            <Main />
+          </MainWrapper>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row centered columns={8}>
@@ -77,7 +47,8 @@ export default function CaruselBox() {
             return (
               <Grid.Column key={elementIndex}>
                 <CaruselBotItem {...element.main} {...element}
-                  showItem={state.showItem} handleclick={handleclick} />
+                  select={select}
+                />
               </Grid.Column>
             )
           };

@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {useSelector} from "react-redux";
+
 export const axiosNowWEather = createAsyncThunk(
   "day5hour3/axiosNowWEather",
   async function (city) {
@@ -17,6 +17,7 @@ export const axiosStartWeather = createAsyncThunk(
 export const d5h3Slice = createSlice({
   name: "d5h3",
   initialState: {
+    selectWeather: null,
     geoLoca: null,
     nowCity: "",
     stat: null,
@@ -29,7 +30,10 @@ export const d5h3Slice = createSlice({
     },
     setGeoLoca: (state, action) => {
       state.geoLoca = action.payload
-    }
+    },
+    selectWeather: (state, action) => {
+      state.selectWeather = action.payload
+    },
   },
   extraReducers: {
     [axiosNowWEather.pending]: (state) => {
@@ -45,5 +49,5 @@ export const d5h3Slice = createSlice({
     }
   },
 });
-export const {setNowCity, setGeoLoca} = d5h3Slice.actions;
+export const {setNowCity, setGeoLoca, selectWeather} = d5h3Slice.actions;
 export default d5h3Slice.reducer;
